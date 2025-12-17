@@ -3,3 +3,6 @@
 *.cPickle
 *.fa
 *.pyc
+
+# custom:
+.vscode
