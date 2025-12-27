@@ -257,6 +257,12 @@ def main():
     # if gpu is to be used
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     
+    print(f"Resource is {device}")
+    if device.type == "cuda":
+        print("GPU index:", torch.cuda.current_device())
+        print("GPU name:", torch.cuda.get_device_name(torch.cuda.current_device()))
+
+    
     seed_torch()
     
     # for loading data
