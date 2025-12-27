@@ -326,7 +326,18 @@ def main():
     
     #pdb.set_trace()
     print('==========Start Loading==========')
-    contact_net.load_state_dict(torch.load(MODEL_SAVED,map_location='cuda:0'))
+    try:
+        # preferred, safer in recent PyTorch versions
+        state = torch.load(MODEL_SAVED, map_location='cuda:0', weights_only=True)
+    except TypeError:
+        # older PyTorch: weights_only not supported; fall back
+        state = torch.load(MODEL_SAVED, map_location='cuda:0')
+
+    # if the saved file contains a dict with 'state_dict' key , handle it:
+    if isinstance(state, dict) and 'state_dict' in state:
+        state = state['state_dict']
+
+    contact_net.load_state_dict(state)
     print('==========Finish Loading==========')
     # contact_net = nn.DataParallel(contact_net, device_ids=[3, 4])
     contact_net.to(device)
